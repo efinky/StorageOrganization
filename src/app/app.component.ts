@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import {RouterModule} from '@angular/router';
 import { Item } from './item';
 import { DisplayResultsComponent } from './display-results/display-results.component';
 
@@ -7,7 +8,7 @@ import { DisplayResultsComponent } from './display-results/display-results.compo
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DisplayResultsComponent],
+  imports: [RouterOutlet, DisplayResultsComponent, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
