@@ -2,6 +2,11 @@
     
     <a [routerLink]="['/']">back to search</a>
     <h1>Configuration</h1>
-    <p>configuration works!</p>
-  
+    <p>Add Items</p>
+    <!-- <form > -->
+        <input #itemName type="text" name="item name" placeholder="Name" required>
+        
+        <input #itemLocation type="text" name="item Location" placeholder="Location" required>
+        <button (click)="addItem(itemName.value, itemLocation.value)">Add Item</button>
+    <!-- </form> -->
 </div>

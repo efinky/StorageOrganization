@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {RouterModule} from '@angular/router';
-import { Item } from './item';
 import { DisplayResultsComponent } from './display-results/display-results.component';
+import { InventoryService } from './inventory.service';
+import { Item } from './item';
 
 
 
@@ -13,26 +14,23 @@ import { DisplayResultsComponent } from './display-results/display-results.compo
   styleUrl: './app.component.css'
 })
 export class AppComponent {
+  inventoryService: InventoryService = inject(InventoryService);
+  items: Item[] = [];
+
+
+  constructor( /*private InventoryService:*/ ){
+    this.items = this.inventoryService.getItems();
+  }
   filter: string = "";
+
+
   search(filter: string) {
-    
+
+    this.items = 
     this.filteredItems = this.items.filter(item => item.name.includes(filter));
   };
   title = 'storage-organizer';
-  
-  items: Item[] = [
-    {id: 1,
-    name: "truck",
-    location: "garage",
-    },
-    {id: 2,
-    name: "bike",
-    location: "garage",
-    },
-    {id: 3,
-    name: "lawnmower",
-    location: "garage",
-    },
-  ];
+
+
   filteredItems: Item[] = this.items;
 }

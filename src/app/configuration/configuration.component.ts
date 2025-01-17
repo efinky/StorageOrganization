@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { InventoryService } from '../inventory.service';
 
 @Component({
   selector: 'app-configuration',
@@ -8,5 +9,10 @@ import { RouterModule } from '@angular/router';
   styleUrl: './configuration.component.css'
 })
 export class ConfigurationComponent {
+  inventoryService: InventoryService = inject(InventoryService);
 
+  addItem(name: string, location: string) {
+    this.inventoryService.add(name, location);
+    
+  }
 }
