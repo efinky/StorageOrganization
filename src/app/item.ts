@@ -1,5 +1,12 @@
+
+
 export interface Item {
     id: number,
     name: string,
-    location: string,
+    directions: {
+        containerID: number,
+        locationID: number,
+        description: string
+    },
+    size: string
 }

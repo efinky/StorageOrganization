@@ -1,0 +1,11 @@
+<div style="display: grid; grid-template-columns: auto auto auto auto auto auto auto auto auto auto">
+    @for (row of rows; track row) {
+        @for (column of columns; track column) {
+        <div>
+            <div [class.selected]="selected[row][column]" (click)="selectCell(row, column)">
+                row: {{ row }} column: {{column}}
+            </div>
+        </div>
+        }
+    }
+</div>

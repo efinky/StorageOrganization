@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import {RouterModule} from '@angular/router';
-import { DisplayResultsComponent } from './display-results/display-results.component';
 import { InventoryService } from './inventory.service';
 import { Item } from './item';
 
@@ -9,7 +8,7 @@ import { Item } from './item';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, DisplayResultsComponent, RouterModule],
+  imports: [RouterOutlet, RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

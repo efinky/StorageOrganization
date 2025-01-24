@@ -1,5 +1,3 @@
-declare 
-
 async function initilizeDatabase() {
     const SQL = await initSqlJs({
       // Required to load the wasm binary asynchronously. Of course, you can host it wherever you want
@@ -22,6 +20,6 @@ async function initilizeDatabase() {
   
     // Bind values to the parameters and fetch the results of the query
     console.log(result[0]['values']); // Will print {a:1, b:'world'}
-  }
-  
+}
+
 initilizeDatabase();
