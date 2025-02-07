@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Item } from './item';
 import { Container } from './container';
 import { Location } from './location';
+import { initializeDatabase, Database } from '../database';
+
 
 @Injectable({
   providedIn: 'root',
@@ -10,11 +12,13 @@ export class InventoryService {
   nextItemId: number;
   nextLocationId: number;
   nextContainerId: number;
+  dbPromise: Promise<Database>;
 
   constructor() {
     this.nextItemId = Math.max(...this.items.map((item) => item.id)) + 1;
     this.nextLocationId = Math.max(...this.items.map((item) => item.id)) + 1;
     this.nextContainerId = Math.max(...this.items.map((item) => item.id)) + 1;
+    this.dbPromise = initializeDatabase();
   }
 
   addLocation(locationName: string, width: number, height: number, locationDescription: string): void {
@@ -42,6 +46,7 @@ export class InventoryService {
     }
     
   }
+  
   addContainer(containerName: string, width: number, height: number, containerDescription: string):void {
     const container: Container = {
       id: this.nextContainerId,
@@ -70,8 +75,14 @@ export class InventoryService {
       console.log("there is no item!")
     }
   }
-  getItems(): Item[] {
+  async getItems(): Promise<Item[]> {
+    let db = await this.dbPromise;
+    let asdf = db.exec("SELECT * FROM items");
+    console.log(asdf);
     return this.items;
+  }
+  getLocations() {
+    return this.locations;
   }
 
   addToContainer(itemID: number, containerID: number): void {
@@ -110,7 +121,7 @@ export class InventoryService {
     },
   ];
 
-  locations: Location[] = [
+  public locations: Location[] = [
     {
       id: 1,
       name: "Garage",
