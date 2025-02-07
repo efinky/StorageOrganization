@@ -29,15 +29,23 @@ export async function initializeDatabase() {
     sqlstr = "INSERT INTO containers VALUES (1, 2, 'self-contained', 'string', 1, 1, 2, 2);";
     db.run(sqlstr);
 
-    sqlstr = "CREATE TABLE items (id int, locationID int, containerID int, name char, description char, size char);"
+    sqlstr = "CREATE TABLE items (id int primary key, locationID int, containerID int, name char, description char, size char);"
     db.run(sqlstr);
-    sqlstr = "INSERT INTO items VALUES (1, 2, 2, 'truck', 'the white box in the garage', 'Galaxy');";
+    sqlstr = "INSERT INTO items VALUES (2, 2, 'truck', 'the white box in the garage', 'Galaxy');";
     db.run(sqlstr);
-    sqlstr = "INSERT INTO items VALUES (2, 2, 4, 'bike', 'the red box in the garage', 'Enormous');";
+    sqlstr = "INSERT INTO items VALUES (2, 4, 'bike', 'the red box in the garage', 'Enormous');";
     db.run(sqlstr);
-    sqlstr = "INSERT INTO items VALUES (3, 3, -1, 'lawnmower', 'on the shelf in the garage', 'Super Big');";
+    sqlstr = "INSERT INTO items VALUES (3, -1, 'lawnmower', 'on the shelf in the garage', 'Super Big');";
     db.run(sqlstr);
     return db;
 }
+export function addItemToDB(name: string, containerID: number, locationID: number, description: string, ) {
+
+}
+
+export function updateItemToDB(id: number, name: string, containerID: number, locationID: number, description: string, ) {
+
+}
+
 
 
