@@ -1,8 +1,12 @@
 import initSqlJs from "sql.js";
-import { Database } from "sql.js";
+import { Database, BindParams, SqlValue } from "sql.js";
+import _ from 'lodash';
 
 
 export type {Database};
+declare global {
+  let db: Database;
+}
 
 export async function initializeDatabase() {
     const SQL = await initSqlJs({
@@ -13,9 +17,9 @@ export async function initializeDatabase() {
  
   
     // Create a database
-    let db = new SQL.Database();
+    db = new SQL.Database();
   
-    let sqlstr = "CREATE TABLE locations (id int, name char, width int, height int, description char);"
+    let sqlstr = "CREATE TABLE locations (id integer primary key, name char, width int, height int, description char);"
     db.run(sqlstr);
     sqlstr = "INSERT INTO locations VALUES (1, 'Garage', 10, 10, 'that thing you put cars in');";
     db.run(sqlstr);
@@ -24,27 +28,66 @@ export async function initializeDatabase() {
     sqlstr = "INSERT INTO locations VALUES (3, 'Downstairs Storage Room', 4, 6, 'The creepy room in the basement with no windows');";
     db.run(sqlstr); // Run the query without returning anything
 
-    sqlstr = "CREATE TABLE containers (id int, locationID int, name char, description char, width int, height int, locationPositionX int, locationPositionY int);"
+    sqlstr = "CREATE TABLE containers (id integer primary key, locationID int, name char, description char, width int, height int, locationPositionX int, locationPositionY int);"
     db.run(sqlstr); // Run the query without returning anything
     sqlstr = "INSERT INTO containers VALUES (1, 2, 'self-contained', 'string', 1, 1, 2, 2);";
     db.run(sqlstr);
 
-    sqlstr = "CREATE TABLE items (id int primary key, locationID int, containerID int, name char, description char, size char);"
+    sqlstr = "CREATE TABLE items (id integer primary key, locationID int, containerID int, name char, description char, size char);"
     db.run(sqlstr);
-    sqlstr = "INSERT INTO items VALUES (2, 2, 'truck', 'the white box in the garage', 'Galaxy');";
+    sqlstr = "INSERT INTO items VALUES (1, 2, 2, 'truck', 'the white box in the garage', 'Galaxy');";
     db.run(sqlstr);
-    sqlstr = "INSERT INTO items VALUES (2, 4, 'bike', 'the red box in the garage', 'Enormous');";
+    sqlstr = "INSERT INTO items VALUES (2, 2, 4, 'bike', 'the red box in the garage', 'Enormous');";
     db.run(sqlstr);
-    sqlstr = "INSERT INTO items VALUES (3, -1, 'lawnmower', 'on the shelf in the garage', 'Super Big');";
+    sqlstr = "INSERT INTO items VALUES (3, 3, -1, 'lawnmower', 'on the shelf in the garage', 'Super Big');";
     db.run(sqlstr);
     return db;
 }
-export function addItemToDB(name: string, containerID: number, locationID: number, description: string, ) {
+export function addItemToDB(name: string, containerID: number, locationID: number, description: string, size: number) {
+  let insertStatement = db.prepare('INSERT INTO items (locationID, containerID, name, description, size) VALUES (?, ?, ?, ?, ?)');
 
+  insertStatement.bind([name, containerID, locationID, description, size]);
+
+  insertStatement.run();
 }
 
-export function updateItemToDB(id: number, name: string, containerID: number, locationID: number, description: string, ) {
+export function updateItemToDB(id: number, name: string, containerID: number, locationID: number, description: string, size: number) {
+  let insertStatement = db.prepare('UPDATE items SET name=?, containerID=?, locationID=?, description=?, size=? WHERE id=?');
 
+  insertStatement.bind([name, containerID, locationID, description, size, id]);
+  insertStatement.run();
+}
+
+export function getItemById(id: number) {  
+  let selectStatement = db.prepare("SELECT * FROM items WHERE id = ?");
+
+  selectStatement.bind([id]);
+
+  return selectStatement.get();
+}
+
+export function getItemsByContainerIdFromDB(containerID: number) {  
+  let selectStatement = db.prepare("SELECT * FROM items WHERE containerID = ?");
+
+  selectStatement.bind([containerID]);
+
+  return selectStatement.get();
+}
+
+export function getItemsByLocationIdFromDB(locationID: number) {  
+  let selectStatement = db.prepare("SELECT * FROM items WHERE locationID = ?");
+
+  selectStatement.bind([locationID]);
+
+  return selectStatement.get();
+}
+
+export function searchItemsFromDB(search: string) {  
+  let selectStatement = db.prepare("SELECT * FROM items WHERE name LIKE ? OR description LIKE ?");
+
+  selectStatement.bind([`%${search}%`, `%${search}%`]);
+
+  return selectStatement.get();
 }
 
 

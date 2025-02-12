@@ -1,9 +1,10 @@
-<div style="display: grid; grid-template-columns: auto auto auto auto auto auto auto auto auto auto">
+<div [style.grid-template-columns]="mycolumns" style="display: grid; grid-template-rows: repeat(auto-fill, minmax(25px, 1fr))">
     @for (row of rows; track row) {
         @for (column of columns; track column) {
         <div>
             <div [class.selected]="selected[row][column]" (click)="selectCell(row, column)">
-                row: {{ row }} column: {{column}}
+                <div style="border: 1px solid; height: 25px; width: 25pxs;"></div>
+                <!--row: {{ row }} column: {{column}}auto auto auto auto auto auto auto auto auto auto!-->
             </div>
         </div>
         }

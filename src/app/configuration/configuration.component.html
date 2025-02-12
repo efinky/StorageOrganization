@@ -17,9 +17,9 @@
             <option  [ngValue]="null" disabled>Choose your Location</option>
             <!-- @for (location of locations; track location.id; { -->
                 <option *ngFor="let location of locations" [ngValue]="location">
-                {{ location.name }}
+                <div style="border: 1px;"></div>
                 </option>
-            <!-- } -->
+            <!-- }{{ location.name }} -->
           </select> 
           <select ng-model="selectedName" ng-options="item for item in names"></select>
         <app-location-select></app-location-select>

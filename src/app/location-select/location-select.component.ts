@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './location-select.component.css'
 })
 export class LocationSelectComponent {
+  mycolumns: string = "25px 25px 25px 25px 25px 25px 25px 25px 25px 25px";
   rows: number[] = [...Array(10).keys()];
   columns: number[] = [...Array(10).keys()];
   selected: boolean[][] = new Array(new Array(false,false,false,false,false,false,false,false,false,false), new Array(false,false,false,false,false,false,false,false,false,false), new Array(false,false,false,false,false,false,false,false,false,false), new Array(false,false,false,false,false,false,false,false,false,false), new Array(false,false,false,false,false,false,false,false,false,false), new Array(false,false,false,false,false,false,false,false,false,false), new Array(false,false,false,false,false,false,false,false,false,false), new Array(false,false,false,false,false,false,false,false,false,false), new Array(false,false,false,false,false,false,false,false,false,false), new Array(false,false,false,false,false,false,false,false,false,false));
