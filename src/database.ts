@@ -7,6 +7,7 @@ export type {Database};
 declare global {
   let db: Database;
 }
+let db: Database;
 
 export async function initializeDatabase() {
     const SQL = await initSqlJs({
@@ -15,7 +16,6 @@ export async function initializeDatabase() {
       locateFile: file => '/sql-wasm.wasm'
     });
  
-  
     // Create a database
     db = new SQL.Database();
   
@@ -41,9 +41,48 @@ export async function initializeDatabase() {
     db.run(sqlstr);
     sqlstr = "INSERT INTO items VALUES (3, 3, -1, 'lawnmower', 'on the shelf in the garage', 'Super Big');";
     db.run(sqlstr);
+
     return db;
 }
-export function addItemToDB(name: string, containerID: number, locationID: number, description: string, size: number) {
+
+
+export async function saveDatabaseToLocalStorage() {
+    let dbExport = db.export();
+    let stringEncodeed = Array.prototype.map((value) => {
+      return String.fromCharCode(value);
+    }, dbExport)
+    .join();
+
+
+    localStorage.setItem("sql.js", window.btoa(stringEncodeed));
+}
+
+export async function loadDatabaseFromLocalStorage() {
+  let base64Encoded = localStorage.getItem("sql.js");
+  if (base64Encoded !== null) {
+    let stringEncodeed = window.atob(base64Encoded);
+    let dbImport = new Uint8Array(stringEncodeed.length);
+    for (let i = 0; i < stringEncodeed.length; i++) {
+      dbImport[i] = stringEncodeed.charCodeAt(i);
+    }
+  }
+  
+  
+  // let stringEncodeed = _.map(dbExport, (value) => {
+  //   return String.fromCharCode(value);
+  // })
+  // .join();
+  db = new Database();
+  let dbExport = db.export();
+    
+    
+
+  
+}
+
+
+
+export function addItemToDB(name: string, containerID: number, locationID: number, description: string, size: string) {
   let insertStatement = db.prepare('INSERT INTO items (locationID, containerID, name, description, size) VALUES (?, ?, ?, ?, ?)');
 
   insertStatement.bind([name, containerID, locationID, description, size]);
@@ -62,6 +101,13 @@ export function getItemById(id: number) {
   let selectStatement = db.prepare("SELECT * FROM items WHERE id = ?");
 
   selectStatement.bind([id]);
+
+  return selectStatement.get();
+}
+export function getItemsByDescriptionorName(description: string) {  
+  let selectStatement = db.prepare("SELECT * FROM items WHERE descrption like '%?%'");
+
+  selectStatement.bind([description]);
 
   return selectStatement.get();
 }

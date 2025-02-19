@@ -15,12 +15,12 @@ export class DisplayResultsComponent {
   inventoryService: InventoryService = inject(InventoryService);
   
   constructor( /*private InventoryService:*/ ){
-    this.inventoryService.getItems().then(items => this.filteredItems = items);
+    //this.inventoryService.getItems().then(items => this.filteredItems = items);
   }
   filter: string = "";
   async search(filter: string) {
-    const items = await this.inventoryService.getItems();
-    this.filteredItems = items.filter(item => item.name.includes(filter));
+    this.inventoryService.convertDatabaseItem(this.inventoryService.getItemsByDescriptionorName(filter))
+    console.log("here!!!")
   };
   title = 'storage-organizer';
   

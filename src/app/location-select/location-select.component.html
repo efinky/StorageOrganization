@@ -1,4 +1,4 @@
-<div [style.grid-template-columns]="mycolumns" style="display: grid; grid-template-rows: repeat(auto-fill, minmax(25px, 1fr))">
+<div [style.grid-template-columns]="mycolumns" [style.grid-template-rows]="myrows" style="display: grid;">
     @for (row of rows; track row) {
         @for (column of columns; track column) {
         <div>

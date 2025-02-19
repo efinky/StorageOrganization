@@ -32,6 +32,9 @@ export class ConfigurationComponent {
   width: number = 0
   height: number = 0
 
+  constructor() {
+  }
+
   // addItem(name: string, location: string) {
   addItem() {
     this.inventoryService.addItem(this.itemName,-1, this.itemLocationID, this.itemSize, "");

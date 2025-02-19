@@ -17,12 +17,12 @@
             <option  [ngValue]="null" disabled>Choose your Location</option>
             <!-- @for (location of locations; track location.id; { -->
                 <option *ngFor="let location of locations" [ngValue]="location">
-                <div style="border: 1px;"></div>
+                    {{ location.name }}
                 </option>
-            <!-- }{{ location.name }} -->
+            <!-- } <div style="border: 1px;"></div>-->
           </select> 
           <select ng-model="selectedName" ng-options="item for item in names"></select>
-        <app-location-select></app-location-select>
+        <app-location-select [selectedLocation]="locationSelect" ></app-location-select>
         <button class="primary" type="button" (click)="addItem()">Add Item</button>
 
     </div>

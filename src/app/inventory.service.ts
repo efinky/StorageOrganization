@@ -2,7 +2,10 @@ import { Injectable } from '@angular/core';
 import { Item } from './item';
 import { Container } from './container';
 import { Location } from './location';
-import { initializeDatabase, Database } from '../database';
+import { initializeDatabase, Database, addItemToDB, getItemById, getItemsByDescriptionorName } from '../database';
+import { SqlValue } from 'sql.js';
+import { values } from 'lodash';
+import { ArrayType } from '@angular/compiler';
 
 
 @Injectable({
@@ -19,6 +22,7 @@ export class InventoryService {
     this.nextLocationId = Math.max(...this.items.map((item) => item.id)) + 1;
     this.nextContainerId = Math.max(...this.items.map((item) => item.id)) + 1;
     this.dbPromise = initializeDatabase();
+    //this.getItemByDescription("garage");
   }
 
   addLocation(locationName: string, width: number, height: number, locationDescription: string): void {
@@ -48,7 +52,7 @@ export class InventoryService {
   }
   
   addContainer(containerName: string, width: number, height: number, containerDescription: string):void {
-    const container: Container = {
+    /*const container: Container = {
       id: this.nextContainerId,
       name: containerName,
       width: width,
@@ -56,12 +60,12 @@ export class InventoryService {
       locationID: -1,
       locationPosition: [-1,-1],
       description: containerDescription
-    }
+    }*/
 
     
-    this.nextLocationId++;
-    this.containers.push(container);
-    console.log(this.containers);
+    //this.nextLocationId++;
+    //this.containers.push(container);
+    //console.log(this.containers);
   }
 
   updateItemDirections(itemID: number, containerID: number, locationID: number, directionsDescription: string): void {
@@ -81,6 +85,28 @@ export class InventoryService {
     console.log(asdf);
     return this.items;
   }
+  getItemByID(id: number): Item {
+    let item = getItemById(id);
+    console.log(item);
+    return item as any;
+    
+  }
+  convertDatabaseItem(sqlItems: SqlValue[]) {
+    let items = [];
+    if (sqlItems) {
+      let values = sqlItems[0] ;
+      console.log("here!")
+      console.log(values)
+    }
+    
+
+    
+  }
+  getItemsByDescriptionorName(descrptionOrName:string) :SqlValue[] {
+
+    return getItemsByDescriptionorName(descrptionOrName);
+
+  }
   getLocations() {
     return this.locations;
   }
@@ -95,59 +121,22 @@ export class InventoryService {
   }
 
   addItem(name: string, containeID: number, locationID: number, description: string, size: string): void {
-    const item: Item = {
-      id: this.nextItemId,
-      name: name,
-      directions: {
-        containerID: containeID,
-        locationID: locationID,
-        description: description
-      },
-      size: size,
-    };
-    this.nextItemId++;
-    this.items.push(item);
-    console.log(this.items);
+    addItemToDB(name, containeID, locationID, description, size);
   }
   containers: Container[] = [
-    {
-      id: 1,
-      name: 'self-contained',
-      width: 1,
-      height: 1,
-      locationID: 2,
-      locationPosition: [2,2],
-      description: 'string',
-    },
+    
   ];
 
   public locations: Location[] = [
-    {
-      id: 1,
-      name: "Garage",
-      width: 10,
-      height: 10,
-      description: "that thing you put cars in"
-    },
-    {
-      id: 2,
-      name: "Shed",
-      width: 4,
-      height: 6,
-      description: "the building out back"
-    },
-    {
-      id: 3,
-      name: "Downstairs Storage Room",
-      width: 4,
-      height: 6,
-      description: "The creepy room in the basement with no windows"
-    }
-  ]
+    { id: 1, name: 'garage', width: 10, height: 10, description: "the garage" },
+    { id: 2, name: 'closet', width: 10, height: 2, description: "closet" },
+    
+    
+  ];
   
   items: Item[] = [
-    { id: 1, name: 'truck', directions: {containerID: 2, locationID: 2, description: "the white box in the garage"}, size: 'Galaxy' },
+    /*{ id: 1, name: 'truck', directions: {containerID: 2, locationID: 2, description: "the white box in the garage"}, size: 'Galaxy' },
     { id: 2, name: 'bike', directions: {containerID: 4, locationID: 3, description: "the red box in the garage"}, size: 'Enormous' },
-    { id: 3, name: 'lawnmower', directions: {containerID: -1, locationID: 3, description: "on the shelf in the garage"}, size: 'Super Big' },
+    { id: 3, name: 'lawnmower', directions: {containerID: -1, locationID: 3, description: "on the shelf in the garage"}, size: 'Super Big' },*/
   ];
 }
