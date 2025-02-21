@@ -29,6 +29,7 @@ export class LocationSelectComponent {
     if (this._selectedLocation) {
       this.mycolumns = Array(this._selectedLocation.width).fill("25px").join(" ");
       this.myrows = Array(this._selectedLocation.height).fill("25px").join(" ");
+      this.selected = Array.from({length: this._selectedLocation.height}, () => Array(this._selectedLocation?.width).fill(false));
       this.rows = [...Array(this._selectedLocation.height).keys()];
       this.columns = [...Array(this._selectedLocation.width).keys()];
       console.log("selectedLocation", this._selectedLocation);

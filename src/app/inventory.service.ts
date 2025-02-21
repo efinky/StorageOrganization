@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { Item } from './item';
 import { Container } from './container';
 import { Location } from './location';
-import { initializeDatabase, Database, addItemToDB, getItemById, getItemsByDescriptionorName } from '../database';
-import { SqlValue } from 'sql.js';
+import { initializeDatabase, Database, addItemToDB, getItemById, searchItemsFromDB } from '../database';
+import { ParamsObject, SqlValue } from 'sql.js';
 import { values } from 'lodash';
 import { ArrayType } from '@angular/compiler';
 
@@ -91,20 +91,14 @@ export class InventoryService {
     return item as any;
     
   }
-  convertDatabaseItem(sqlItems: SqlValue[]) {
-    let items = [];
-    if (sqlItems) {
-      let values = sqlItems[0] ;
-      console.log("here!")
-      console.log(values)
-    }
+
     
 
     
-  }
-  getItemsByDescriptionorName(descrptionOrName:string) :SqlValue[] {
+  
+  getItemsByDescriptionorName(descrptionOrName:string)  {
 
-    return getItemsByDescriptionorName(descrptionOrName);
+    return searchItemsFromDB(descrptionOrName);
 
   }
   getLocations() {

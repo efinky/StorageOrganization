@@ -19,8 +19,8 @@ export class DisplayResultsComponent {
   }
   filter: string = "";
   async search(filter: string) {
-    this.inventoryService.convertDatabaseItem(this.inventoryService.getItemsByDescriptionorName(filter))
-    console.log("here!!!")
+    this.filteredItems = this.inventoryService.getItemsByDescriptionorName(filter);
+    console.log("here!!!", filter, this.inventoryService.getItemsByDescriptionorName(filter))
   };
   title = 'storage-organizer';
   

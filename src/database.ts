@@ -1,6 +1,9 @@
-import initSqlJs from "sql.js";
+import initSqlJs, { ParamsObject } from "sql.js";
 import { Database, BindParams, SqlValue } from "sql.js";
 import _ from 'lodash';
+import { Item } from './app/item';
+import { Container } from './app/container';
+import { Location } from './app/location';
 
 
 export type {Database};
@@ -72,8 +75,8 @@ export async function loadDatabaseFromLocalStorage() {
   //   return String.fromCharCode(value);
   // })
   // .join();
-  db = new Database();
-  let dbExport = db.export();
+  //db = new Database();
+  //let dbExport = db.export();
     
     
 
@@ -105,7 +108,7 @@ export function getItemById(id: number) {
   return selectStatement.get();
 }
 export function getItemsByDescriptionorName(description: string) {  
-  let selectStatement = db.prepare("SELECT * FROM items WHERE descrption like '%?%'");
+  let selectStatement = db.prepare("SELECT * FROM items WHERE description like ?");
 
   selectStatement.bind([description]);
 
@@ -128,12 +131,34 @@ export function getItemsByLocationIdFromDB(locationID: number) {
   return selectStatement.get();
 }
 
+function itemFromRow(row: any): Item {
+  return {
+    id: row.id,
+    name: row.name,
+    directions: {
+      containerID: row.containerID,
+      locationID: row.locationID,
+      description: row.description,
+    },
+    size: row.size
+  }
+}
+
 export function searchItemsFromDB(search: string) {  
-  let selectStatement = db.prepare("SELECT * FROM items WHERE name LIKE ? OR description LIKE ?");
+  let foo = db.exec(`SELECT * FROM items`);
+  console.log(foo);
+  // return 
+  let selectStatement = db.prepare("SELECT * FROM items");//WHERE name LIKE ? OR description LIKE ?");
+  
+  let results = [];
 
-  selectStatement.bind([`%${search}%`, `%${search}%`]);
+  while (selectStatement.step()) {
+    results.push(itemFromRow(selectStatement.getAsObject()));
+    // console.log(selectStatement.getAsObject());
+  }
+  return results;
+ // selectStatement.bind([`%${search}%`, `%${search}%`]);
 
-  return selectStatement.get();
 }
 
 
